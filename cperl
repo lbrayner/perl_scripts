@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# cpan perl
+
+PATH=~/perl5/bin${PATH:+:${PATH}}; export PATH;
+PERL5LIB=~/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT=~/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}};
+export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"`readlink -f ~/perl5`\""; export PERL_MB_OPT;
+INSTALL_BASE=~/perl5;
+PERL_MM_OPT=$INSTALL_BASE; export PERL_MM_OPT;
+
+# echo $PATH
+# echo $PERL5LIB
+# echo $PERL_LOCAL_LIB_ROOT
+# echo $PERL_MB_OPT
+# echo $PERL_MM_OPT
+# echo $INSTALL_BASE
+
+perl -- "${@}"
