@@ -4,8 +4,18 @@ use strict;
 use warnings;
 use Crypt::PasswdMD5;
 
+use Getopt::Std;
+
 sub usage(){
-    return "${0} PASSWORD";
+    return "${0} [-s SALT] [-v HASH] PASSWORD\n";
+}
+
+our($opt_s,$opt_v);
+
+if(!getopts('s:v:'))
+{
+    print STDERR usage();
+    exit 1;
 }
 
 if(($#ARGV + 1) != 1)
@@ -16,4 +26,23 @@ if(($#ARGV + 1) != 1)
 
 my $password = $ARGV[0];
 
-print unix_md5_crypt($password);
+if(defined $opt_s)
+{
+    my $salt = $opt_s;
+    print apache_md5_crypt($password,$salt);
+    exit 0;
+}
+
+if(defined $opt_v)
+{
+    my $hash = $opt_v;
+    my $salt = $hash =~ s/^\$[^\$]+\$([^\$]+)\$.*$/$1/r;
+    my $computed_hash = apache_md5_crypt($password,$salt);
+    # print "${hash}\n";
+    # print "${salt}\n";
+    # print "${computed_hash}\n";
+    exit !($hash eq $computed_hash)
+
+}
+
+print apache_md5_crypt($password);
