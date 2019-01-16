@@ -38,11 +38,14 @@ if(defined $opt_v)
     my $hash = $opt_v;
     my $salt = $hash =~ s/^\$[^\$]+\$([^\$]+)\$.*$/$1/r;
     my $computed_hash = apache_md5_crypt($password,$salt);
-    # print "${hash}\n";
-    # print "${salt}\n";
-    # print "${computed_hash}\n";
-    exit !($hash eq $computed_hash)
 
+    if($hash ne $computed_hash)
+    {
+        print STDERR "Wrong password!\n";
+        exit 1;
+    }
+
+    exit 0;
 }
 
-print apache_md5_crypt($password);
+print apache_md5_crypt($password) . "\n";
