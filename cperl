@@ -1,15 +1,24 @@
-#!/bin/sh
+#!/bin/bash
+
+# set -x
 
 # cpan perl
 
-PATH=~/perl5/bin${PATH:+:${PATH}}; export PATH;
-PERL5LIB=~/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT=~/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}};
+if [[ -n "${APACHE_RUN_USER}" ]]
+then
+    export HOME="`getent passwd ${APACHE_RUN_USER} | cut -d: -f6`"
+fi
+
+PATH=$HOME/perl5/bin${PATH:+:${PATH}}; export PATH;
+PERL5LIB=$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT=$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}};
 export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"`readlink -f ~/perl5`\""; export PERL_MB_OPT;
-INSTALL_BASE=~/perl5;
+PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
+INSTALL_BASE=$HOME/perl5;
 PERL_MM_OPT=$INSTALL_BASE; export PERL_MM_OPT;
 
+# echo $APACHE_RUN_USER
+# echo $HOME
 # echo $PATH
 # echo $PERL5LIB
 # echo $PERL_LOCAL_LIB_ROOT
